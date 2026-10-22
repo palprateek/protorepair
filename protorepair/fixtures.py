@@ -189,7 +189,7 @@ def _p2(fixture_id: str, text: str, *, comp=(95, 3, 2), stated=95, total=10.5, v
             specific_capacity_mAh_g=200.0,
             active_fraction=stated / 100.0,
             diameter_mm=14.0,
-            quote="total dry loading of 10.5 mg/cm², corresponding to ~2.0 mAh/cm²",
+            quote=f"total dry loading of {total:g} mg/cm², corresponding to ~2.0 mAh/cm²",
         ),
         anode=Anode(material="Li metal", thickness_um=50.0 if fixture_id == "G14" else None, diameter_mm=19.0,
                     quote="a 19 mm Li foil anode"),

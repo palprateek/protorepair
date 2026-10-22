@@ -1,6 +1,10 @@
 # ProtoRepair
 
+![ProtoRepair cover](docs/assets/protorepair-cover.png)
+
 **Pre-flight consistency checks for NMC811 || Li-metal coin-cell protocols.**
+
+[Watch the 3:12 tutorial](docs/assets/protorepair-tutorial.mp4) · [Gallery card](docs/assets/protorepair-gallery-card.png) · [Write-up](writeup.md)
 
 Paste an assembly excerpt. ProtoRepair returns **findings + one local patch per finding**, backed by explicit arithmetic, units, and metadata-only evidence. It does **not** rewrite the protocol, merge a corrected version, or emit a numeric “protocol score.”
 
@@ -33,7 +37,7 @@ The checks are deterministic. Gemini extraction is optional and untrusted: outpu
 ```bash
 python3.11 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements-protorepair.txt
+pip install -r requirements.txt
 streamlit run protorepair_app.py
 ```
 
@@ -42,6 +46,7 @@ No API key is required. To enable live extraction:
 ```bash
 cp .env.example .env
 # edit .env and set GEMINI_API_KEY
+# optional: GEMINI_MODEL (default: gemini-3.5-flash-lite)
 chmod 600 .env
 ```
 
@@ -55,6 +60,15 @@ python -m protorepair --fixture G04 --json
 python -m protorepair --fixture G03 --validate-patches
 ```
 
+## Tests
+
+```bash
+python -m pytest -q
+python -m eval.protorepair.run_eval --public-only
+```
+
+The public subset reports **46 passed, 4 skipped** in this environment; the skips are live-API tests that require a key.
+
 ## Demo fixtures
 
 Public, licensed fixtures:
@@ -66,7 +80,7 @@ Public, licensed fixtures:
 - **G07** — P4 natural transfer case: `5.0 wt% NMP` and `3 mAh g−1` are ambiguities, not confident corrections.
 - **G09** — P5 base: purchased electrode; Li-cell electrolyte volume and water values are unknown.
 
-P1/P3-derived fixtures are **local-only** and are not in the public export. Public results mention their case IDs only to disclose that they are not publicly reproducible; no source text, example, or abstract is published.
+Three local-only source-derived fixtures are excluded from the public export. No local-only source text, example, or abstract is published.
 
 ## Patch contract
 
@@ -84,7 +98,28 @@ python -m eval.protorepair.run_eval              # all 14 cases when local fixtu
 python -m eval.protorepair.run_eval --public-only
 ```
 
-Saved exact outputs live in `eval/protorepair/results.json` and `results.md`. The full local run reports **9 TP / 0 FP / 0 FN**, 0 value-changing patches on clean cases, 9/9 patch validity, and 14/14 readiness. The public-only run covers 11 cases and reports 7 TP / 0 FP / 0 FN. These are small descriptive counts, not a benchmark; no cells were assembled and the labels were not blind-adjudicated. The archived generic linter has no B1–B5/C1–C2 crosswalk, so it is reported as a baseline limitation, not evidence for the product. B0 (raw LLM) is marked `not_run`, not estimated.
+Saved exact outputs live in `eval/protorepair/results.json` and `results.md`. The full local run reports **9 TP / 0 FP / 0 FN**, 0 value-changing patches on clean cases, 9/9 patch validity, and 14/14 readiness. The public-only run covers 11 cases and reports 7 TP / 0 FP / 0 FN, 7/7 patch validity, and 11/11 readiness. These are small descriptive counts, not a benchmark; no cells were assembled and the labels were not blind-adjudicated. The archived generic linter has no B1–B5/C1–C2 crosswalk, so it is reported as a baseline limitation, not evidence for the product. B0 (raw LLM) is marked `not_run`, not estimated.
+
+### Live Gemini extraction (optional path)
+
+A repeatable live run on the 11 public cases, with `gemini-3.5-flash-lite` and no cache, produced:
+
+| Metric | Result |
+|---|---:|
+| Schema/quote-valid responses | 11/11 |
+| Labeled faults matched | 7/7 |
+| False positives / false negatives | 0 / 0 |
+| Readiness exact | 11/11 |
+| Patch validity | 7/7 |
+| Latency mean / median / p95 / max | 9.08 / 9.43 / 10.61 / 12.27 s |
+
+This is an extraction-path test, not the B0 raw-LLM baseline. Gemini only extracts stated facts; the deterministic checks, units, patches, and readiness remain code-owned. See `eval/protorepair/gemini_live_results.md` and rerun with `python -m eval.protorepair.run_gemini_live`.
+
+## Media
+
+- **Cover:** [`docs/assets/protorepair-cover.png`](docs/assets/protorepair-cover.png) (1600×900).
+- **Gallery card:** [`docs/assets/protorepair-gallery-card.png`](docs/assets/protorepair-gallery-card.png) (1200×1200).
+- **Tutorial:** [`docs/assets/protorepair-tutorial.mp4`](docs/assets/protorepair-tutorial.mp4) (3:12, 1080p, narrated).
 
 ## Evidence
 
@@ -97,8 +132,8 @@ The committed snapshot is metadata-only: title, authors, year, venue, DOI link, 
 - Code: MIT (`LICENSE`).
 - Documentation and write-up: CC BY 4.0 (`LICENSE-DOCS`).
 - Public fixtures are adapted from CC BY 4.0 sources; see `THIRD_PARTY.md` and the source line in each example. Changes are disclosed (condensed text, substituted commercial material, seeded faults, labeled test values).
-- P1- and P3-derived fixtures are local-only and excluded from the public export.
-- `spec.md`, `.scratch/`, `.env`, caches, old `protoprepair/`, root `app.py`, old data/tests/eval, and raw outputs are not part of the public export.
+- Local-only fixtures, planning notes, caches, and old prototypes are excluded from the public export.
+- Only the public whitelist is exported; raw outputs and secrets are not published.
 
 ## Repository layout
 
@@ -117,4 +152,4 @@ scripts/export_public.py clean public export + boundary scan
 - The deterministic parser is conservative and can leave fields unknown; the structured fixtures are the reliable demo path.
 - The moisture screen shows component limits separately; the 430 ppm line is a Gr/NMC622 reference warning, not an NMC811 constant.
 - B0 raw-LLM baseline requires the Gemini endpoint and three scored runs. It has not been run.
-- The exposed planning API key must be rotated after the hackathon; never publish `.env`.
+- Never publish `.env` or API keys; keep `.env` at mode 600 and rotate any key that may have been exposed.

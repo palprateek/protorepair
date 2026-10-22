@@ -1,0 +1,330 @@
+{
+  "generated_at": "2026-10-22T10:39:02.039518+00:00",
+  "model": "gemini-3.5-flash-lite",
+  "use_cache": false,
+  "summary": {
+    "cases": 11,
+    "api_ok": 11,
+    "validation_errors": 0,
+    "tp": 7,
+    "fp": 0,
+    "fn": 0,
+    "readiness_exact": 11,
+    "patches_tested": 7,
+    "patches_valid": 7,
+    "latency_mean_s": 9.084,
+    "latency_median_s": 9.431,
+    "latency_max_s": 12.274,
+    "latency_p95_s": 10.612
+  },
+  "cases": [
+    {
+      "case": "G02",
+      "extraction_mode": "gemini",
+      "cached": false,
+      "latency_s": 10.147,
+      "validation_errors": 0,
+      "readiness_expected": "REVIEW",
+      "readiness": "REVIEW",
+      "gold_fail": [],
+      "pred_fail": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "unknown": [
+        "B1",
+        "B3",
+        "C1",
+        "C2"
+      ],
+      "patches": []
+    },
+    {
+      "case": "G03",
+      "extraction_mode": "gemini",
+      "cached": false,
+      "latency_s": 9.431,
+      "validation_errors": 0,
+      "readiness_expected": "NOT READY",
+      "readiness": "NOT READY",
+      "gold_fail": [
+        "B1"
+      ],
+      "pred_fail": [
+        "B1"
+      ],
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "unknown": [
+        "B3",
+        "C1",
+        "C2"
+      ],
+      "patches": [
+        {
+          "id": "P-B1-G03",
+          "applied": true,
+          "target_removed": true,
+          "new_fail_classes": [],
+          "error": null
+        }
+      ]
+    },
+    {
+      "case": "G04",
+      "extraction_mode": "gemini",
+      "cached": false,
+      "latency_s": 12.274,
+      "validation_errors": 0,
+      "readiness_expected": "NOT READY",
+      "readiness": "NOT READY",
+      "gold_fail": [
+        "B2"
+      ],
+      "pred_fail": [
+        "B2"
+      ],
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "unknown": [
+        "B1",
+        "B3",
+        "C1",
+        "C2"
+      ],
+      "patches": [
+        {
+          "id": "P-B2-G04",
+          "applied": true,
+          "target_removed": true,
+          "new_fail_classes": [],
+          "error": null
+        }
+      ]
+    },
+    {
+      "case": "G05",
+      "extraction_mode": "gemini",
+      "cached": false,
+      "latency_s": 9.922,
+      "validation_errors": 0,
+      "readiness_expected": "REVIEW",
+      "readiness": "REVIEW",
+      "gold_fail": [
+        "B4"
+      ],
+      "pred_fail": [
+        "B4"
+      ],
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "unknown": [
+        "B1",
+        "B3",
+        "C1",
+        "C2"
+      ],
+      "patches": [
+        {
+          "id": "P-B4-G05",
+          "applied": true,
+          "target_removed": true,
+          "new_fail_classes": [],
+          "error": null
+        }
+      ]
+    },
+    {
+      "case": "G06",
+      "extraction_mode": "gemini",
+      "cached": false,
+      "latency_s": 10.514,
+      "validation_errors": 0,
+      "readiness_expected": "NOT READY",
+      "readiness": "NOT READY",
+      "gold_fail": [
+        "C2"
+      ],
+      "pred_fail": [
+        "C2"
+      ],
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "unknown": [
+        "B1",
+        "B3",
+        "C1"
+      ],
+      "patches": [
+        {
+          "id": "P-C2-G06",
+          "applied": true,
+          "target_removed": true,
+          "new_fail_classes": [],
+          "error": null
+        }
+      ]
+    },
+    {
+      "case": "G07",
+      "extraction_mode": "gemini",
+      "cached": false,
+      "latency_s": 8.027,
+      "validation_errors": 0,
+      "readiness_expected": "REVIEW",
+      "readiness": "REVIEW",
+      "gold_fail": [],
+      "pred_fail": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "unknown": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "patches": []
+    },
+    {
+      "case": "G08",
+      "extraction_mode": "gemini",
+      "cached": false,
+      "latency_s": 8.426,
+      "validation_errors": 0,
+      "readiness_expected": "NOT READY",
+      "readiness": "NOT READY",
+      "gold_fail": [
+        "B3"
+      ],
+      "pred_fail": [
+        "B3"
+      ],
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "unknown": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "patches": [
+        {
+          "id": "P-B3-G08",
+          "applied": true,
+          "target_removed": true,
+          "new_fail_classes": [],
+          "error": null
+        }
+      ]
+    },
+    {
+      "case": "G09",
+      "extraction_mode": "gemini",
+      "cached": false,
+      "latency_s": 6.568,
+      "validation_errors": 0,
+      "readiness_expected": "REVIEW",
+      "readiness": "REVIEW",
+      "gold_fail": [],
+      "pred_fail": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "unknown": [
+        "B2",
+        "B4",
+        "C1"
+      ],
+      "patches": []
+    },
+    {
+      "case": "G10",
+      "extraction_mode": "gemini",
+      "cached": false,
+      "latency_s": 6.915,
+      "validation_errors": 0,
+      "readiness_expected": "NOT READY",
+      "readiness": "NOT READY",
+      "gold_fail": [
+        "C1"
+      ],
+      "pred_fail": [
+        "C1"
+      ],
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "unknown": [
+        "B2",
+        "B4"
+      ],
+      "patches": [
+        {
+          "id": "P-C1-G10",
+          "applied": true,
+          "target_removed": true,
+          "new_fail_classes": [],
+          "error": null
+        }
+      ]
+    },
+    {
+      "case": "G11",
+      "extraction_mode": "gemini",
+      "cached": false,
+      "latency_s": 7.084,
+      "validation_errors": 0,
+      "readiness_expected": "NOT READY",
+      "readiness": "NOT READY",
+      "gold_fail": [
+        "B5"
+      ],
+      "pred_fail": [
+        "B5"
+      ],
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "unknown": [
+        "B2",
+        "B4",
+        "C1"
+      ],
+      "patches": [
+        {
+          "id": "P-B5-G11",
+          "applied": true,
+          "target_removed": true,
+          "new_fail_classes": [],
+          "error": null
+        }
+      ]
+    },
+    {
+      "case": "G14",
+      "extraction_mode": "gemini",
+      "cached": false,
+      "latency_s": 10.612,
+      "validation_errors": 0,
+      "readiness_expected": "READY",
+      "readiness": "READY",
+      "gold_fail": [],
+      "pred_fail": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "unknown": [],
+      "patches": []
+    }
+  ]
+}

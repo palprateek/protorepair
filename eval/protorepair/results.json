@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-22T08:46:47.347311+00:00",
+  "generated_at": "2026-10-22T12:53:56.076304+00:00",
   "case_ids": [
     "G02",
     "G03",
@@ -119,7 +119,7 @@
       "citation_coverage": "n/a",
       "citation_coverage_n": 0,
       "fail_count": 0,
-      "latency_s": 0.0009,
+      "latency_s": 0.0004,
       "finding_count": 4,
       "patches": []
     },
@@ -160,7 +160,7 @@
       "citation_coverage": "1/1",
       "citation_coverage_n": 1,
       "fail_count": 1,
-      "latency_s": 0.0007,
+      "latency_s": 0.0004,
       "finding_count": 4,
       "patches": [
         "P-B1-G03"
@@ -204,7 +204,7 @@
       "citation_coverage": "1/1",
       "citation_coverage_n": 1,
       "fail_count": 1,
-      "latency_s": 0.0006,
+      "latency_s": 0.0002,
       "finding_count": 5,
       "patches": [
         "P-B2-G04"
@@ -248,7 +248,7 @@
       "citation_coverage": "1/1",
       "citation_coverage_n": 1,
       "fail_count": 1,
-      "latency_s": 0.0006,
+      "latency_s": 0.0002,
       "finding_count": 5,
       "patches": [
         "P-B4-G05"
@@ -291,7 +291,7 @@
       "citation_coverage": "1/1",
       "citation_coverage_n": 1,
       "fail_count": 1,
-      "latency_s": 0.0005,
+      "latency_s": 0.0002,
       "finding_count": 4,
       "patches": [
         "P-C2-G06"
@@ -332,7 +332,7 @@
       "citation_coverage": "n/a",
       "citation_coverage_n": 0,
       "fail_count": 0,
-      "latency_s": 0.0006,
+      "latency_s": 0.0002,
       "finding_count": 6,
       "patches": []
     },
@@ -379,7 +379,7 @@
       "citation_coverage": "1/1",
       "citation_coverage_n": 1,
       "fail_count": 1,
-      "latency_s": 0.0006,
+      "latency_s": 0.0002,
       "finding_count": 7,
       "patches": [
         "P-B3-G08"
@@ -413,7 +413,7 @@
       "citation_coverage": "n/a",
       "citation_coverage_n": 0,
       "fail_count": 0,
-      "latency_s": 0.0005,
+      "latency_s": 0.0002,
       "finding_count": 2,
       "patches": []
     },
@@ -452,7 +452,7 @@
       "citation_coverage": "1/1",
       "citation_coverage_n": 1,
       "fail_count": 1,
-      "latency_s": 0.0005,
+      "latency_s": 0.0002,
       "finding_count": 2,
       "patches": [
         "P-C1-G10"
@@ -494,7 +494,7 @@
       "citation_coverage": "1/1",
       "citation_coverage_n": 1,
       "fail_count": 1,
-      "latency_s": 0.0005,
+      "latency_s": 0.0002,
       "finding_count": 3,
       "patches": [
         "P-B5-G11"
@@ -522,7 +522,7 @@
       "citation_coverage": "n/a",
       "citation_coverage_n": 0,
       "fail_count": 0,
-      "latency_s": 0.0005,
+      "latency_s": 0.0002,
       "finding_count": 0,
       "patches": []
     }

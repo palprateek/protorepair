@@ -1,6 +1,8 @@
 """B1 composition, fraction sum, cross-statement, and solids/NMP balance."""
 from __future__ import annotations
 
+import re
+
 from ..models import CheckResult, Patch, Recipe
 from ..units import solids_wt_percent
 
@@ -9,6 +11,26 @@ EV = ["EV-B1"]
 
 def _finding_id(recipe: Recipe) -> str:
     return f"B1-{recipe.fixture_id or 'case'}"
+
+
+def _composition_span(text: str) -> str:
+    pattern = (
+        r"\d+(?:\.\d+)?\s*wt%\s*NMC811[^\n]*?"
+        r"\d+(?:\.\d+)?\s*wt%[^\n]*?carbon[^\n]*?and\s+"
+        r"\d+(?:\.\d+)?\s*wt%\s*PVDF"
+    )
+    match = re.search(pattern, text, flags=re.IGNORECASE)
+    return match.group(0) if match else ""
+
+
+def _retarget_composition(span: str) -> str:
+    replacements = iter(("95", "3", "2"))
+    return re.sub(
+        r"\d+(?:\.\d+)?(?=\s*wt%)",
+        lambda m: next(replacements, m.group(0)),
+        span,
+        count=3,
+    )
 
 
 def check_composition(recipe: Recipe) -> CheckResult:
@@ -109,8 +131,8 @@ def check_composition(recipe: Recipe) -> CheckResult:
     if a.status == "fail":
         patch = None
         if recipe.fixture_id in {"G03", "DEMO"}:
-            before = c.composition_quote or "90 wt% NMC811, 5 wt% Super C65 carbon black, and 5 wt% PVDF"
-            after = "95 wt% NMC811, 3 wt% Super C65 carbon black, and 2 wt% PVDF"
+            before = _composition_span(recipe.text) or c.composition_quote or "90 wt% NMC811, 5 wt% Super C65 carbon black, and 5 wt% PVDF"
+            after = _retarget_composition(before)
             patch = Patch(
                 id=f"P-B1-{recipe.fixture_id}",
                 finding_id=_finding_id(recipe),

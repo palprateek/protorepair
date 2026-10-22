@@ -59,6 +59,7 @@ def build(out: Path, force: bool = False) -> None:
         "docs/protorepair-flow.svg": "docs/protorepair-flow.svg",
     }.items():
         _copy(ROOT / src, out / dst)
+    _copy(ROOT / "docs/assets", out / "docs/assets")
     _copy(ROOT / "protorepair", out / "protorepair")
     # The package snapshot is the runtime source; also expose the canonical
     # public data path expected by the spec.
@@ -86,6 +87,8 @@ def build(out: Path, force: bool = False) -> None:
     shutil.copy2(ROOT / "eval/protorepair/__init__.py", eval_out / "__init__.py")
     shutil.copy2(ROOT / "eval/protorepair/run_eval.py", eval_out / "run_eval.py")
     shutil.copy2(ROOT / "eval/protorepair/gold.jsonl", eval_out / "gold.jsonl")
+    for name in ("gemini_live_results.json", "gemini_live_results.md", "run_gemini_live.py"):
+        shutil.copy2(ROOT / "eval/protorepair" / name, eval_out / name)
     for fid in PUBLIC_CASES:
         shutil.copy2(ROOT / "eval/protorepair/cases" / f"{fid}.txt", eval_out / "cases" / f"{fid}.txt")
 

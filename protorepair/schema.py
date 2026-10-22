@@ -168,12 +168,13 @@ def canonical_fields(payload: dict) -> dict:
             "carbon_wt": comp.get("conductive_wt_pct"),
             "binder_wt": comp.get("binder_wt_pct"),
         }
-        for name, m in (("total_dry_mass", e.get("total_dry_mass")), ("loading", e.get("loading")), ("disc_diameter", e.get("disc_diameter"))):
+        for _name, m in (("total_dry_mass", e.get("total_dry_mass")), ("loading", e.get("loading")), ("disc_diameter", e.get("disc_diameter"))):
             if not isinstance(m, dict):
                 continue
             unit = (m.get("unit") or "").replace("²", "2").lower()
-            raw = (m.get("raw") or "").lower()
-            if unit in {"mg/cm2", "mg/cm^2"} and ("loading" in raw or "dry" in raw or name == "total_dry_mass"):
+            # Field names are not trustworthy: Gemini has put mg/cm2 in
+            # "loading" and mAh/cm2 in "total_dry_mass". The unit decides.
+            if unit in {"mg/cm2", "mg/cm^2"}:
                 out["total_loading_mg_cm2"] = m.get("value")
             elif unit in {"mah/cm2", "mah/cm^2"}:
                 out["areal_capacity_mAh_cm2"] = m.get("value")
