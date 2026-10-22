@@ -22,7 +22,7 @@ ProtoRepair is deliberately narrower: it checks what can be checked deterministi
 
 ![ProtoRepair cover](docs/assets/protorepair-cover.png)
 
-**Tutorial:** [watch the 3:12 walkthrough](docs/assets/protorepair-tutorial.mp4) · **Gallery card:** [1200×1200](docs/assets/protorepair-gallery-card.png)
+**Tutorial:** [watch the 3:51 walkthrough](docs/assets/protorepair-tutorial.mp4) · **Gallery card:** [1200×1200](docs/assets/protorepair-gallery-card.png)
 
 ![ProtoRepair flow](docs/protorepair-flow.svg)
 
@@ -96,6 +96,6 @@ The evidence layer is build-time and public-safe: metadata only, no abstracts, n
 ## Links
 
 - Code: [github.com/palprateek/protorepair](https://github.com/palprateek/protorepair).
-- Demo video: [3:12 narrated walkthrough](docs/assets/protorepair-tutorial.mp4).
+- Demo video: [3:51 narrated walkthrough](docs/assets/protorepair-tutorial.mp4).
 - Cover: [1600×900](docs/assets/protorepair-cover.png) · Gallery card: [1200×1200](docs/assets/protorepair-gallery-card.png).
 - Licenses: MIT for code; CC BY 4.0 for docs; third-party fixture notices in `THIRD_PARTY.md`.

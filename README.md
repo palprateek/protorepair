@@ -4,7 +4,7 @@
 
 **Pre-flight consistency checks for NMC811 || Li-metal coin-cell protocols.**
 
-[Watch the 3:12 tutorial](docs/assets/protorepair-tutorial.mp4) · [Gallery card](docs/assets/protorepair-gallery-card.png) · [Write-up](writeup.md)
+[Watch the 3:51 tutorial](docs/assets/protorepair-tutorial.mp4) · [Gallery card](docs/assets/protorepair-gallery-card.png) · [Write-up](writeup.md)
 
 Paste an assembly excerpt or upload a protocol document. ProtoRepair returns **findings + one local patch per finding**, backed by explicit arithmetic, units, and metadata-only evidence. It does **not** rewrite the protocol, merge a corrected version, or emit a numeric “protocol score.”
 
@@ -156,7 +156,7 @@ This is an extraction-path test, not the B0 raw-LLM baseline. Gemini only extrac
 
 - **Cover:** [`docs/assets/protorepair-cover.png`](docs/assets/protorepair-cover.png) (1600×900).
 - **Gallery card:** [`docs/assets/protorepair-gallery-card.png`](docs/assets/protorepair-gallery-card.png) (1200×1200).
-- **Tutorial:** [`docs/assets/protorepair-tutorial.mp4`](docs/assets/protorepair-tutorial.mp4) (3:12, 1080p, narrated).
+- **Tutorial:** [`docs/assets/protorepair-tutorial.mp4`](docs/assets/protorepair-tutorial.mp4) (3:51, 1080p, narrated).
 
 ## Evidence
 
