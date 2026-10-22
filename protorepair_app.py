@@ -176,6 +176,10 @@ with left:
                 st.caption(f"Figure {figure.number} · {figure.caption or 'no caption'}")
                 if figure.ocr_text:
                     st.code(figure.ocr_text[:1500], language="text")
+            if document.figures:
+                st.caption(
+                    "Figures/charts are preserved as captions and OCR labels; plotted data series are not digitized."
+                )
 
     check = st.button("Run deterministic checks", type="primary", use_container_width=True)
     extract_live = st.button(

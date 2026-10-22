@@ -1,6 +1,6 @@
 # ProtoRepair evaluation results
 
-Generated: `2026-10-22T14:47:19.247248+00:00`
+Generated: `2026-10-22T14:50:06.842434+00:00`
 
 Small descriptive case study; 11 cases, 7 fail labels, 1 fully specified clean control(s). No statistical-power claim.
 

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-22T14:47:19.247248+00:00",
+  "generated_at": "2026-10-22T14:50:06.842434+00:00",
   "case_ids": [
     "G02",
     "G03",
@@ -379,7 +379,7 @@
       "citation_coverage": "1/1",
       "citation_coverage_n": 1,
       "fail_count": 1,
-      "latency_s": 0.0006,
+      "latency_s": 0.0005,
       "finding_count": 7,
       "patches": [
         "P-B3-G08"
