@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="260" viewBox="0 0 960 260" role="img" aria-labelledby="title desc">
+  <title id="title">ProtoRepair pipeline</title>
+  <desc id="desc">Protocol text goes through parsing, optional validated extraction, deterministic checks, findings, local patches, and metadata evidence, with readiness output.</desc>
+  <defs>
+    <style>
+      .box { fill: #f7f9fc; stroke: #355070; stroke-width: 2; rx: 12; }
+      .accent { fill: #e8f1fb; stroke: #355070; stroke-width: 2; rx: 12; }
+      .label { font: 15px/1.2 system-ui, sans-serif; fill: #172033; }
+      .small { font: 12px/1.2 system-ui, sans-serif; fill: #475569; }
+      .arrow { stroke: #355070; stroke-width: 2.5; fill: none; marker-end: url(#arrowhead); }
+      .badge { font: 13px/1.2 system-ui, sans-serif; fill: #172033; font-weight: 600; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#355070"/>
+    </marker>
+  </defs>
+  <rect width="960" height="260" fill="#ffffff"/>
+  <text x="28" y="34" class="label" font-weight="700">ProtoRepair: text in, local findings out</text>
+  <rect x="28" y="70" width="150" height="92" class="box"/>
+  <text x="52" y="103" class="label">Protocol text</text>
+  <text x="52" y="124" class="small">line IDs + steps</text>
+  <text x="52" y="142" class="small">units + quotes</text>
+
+  <rect x="222" y="70" width="164" height="92" class="box"/>
+  <text x="244" y="98" class="label">Parse / extract</text>
+  <text x="244" y="119" class="small">deterministic fallback</text>
+  <text x="244" y="137" class="small">Gemini optional</text>
+  <text x="244" y="152" class="small">schema + quote gate</text>
+
+  <rect x="430" y="70" width="176" height="92" class="accent"/>
+  <text x="452" y="98" class="label">Deterministic checks</text>
+  <text x="452" y="119" class="small">A · B1–B5 · C1–C2</text>
+  <text x="452" y="137" class="small">arithmetic + thresholds</text>
+  <text x="452" y="152" class="small">unknown stays unknown</text>
+
+  <rect x="650" y="52" width="282" height="128" class="box"/>
+  <text x="672" y="80" class="label">Findings + one local patch each</text>
+  <text x="672" y="103" class="small">severity · quote · assumptions · evidence</text>
+  <text x="672" y="124" class="small">single contiguous span, preview only</text>
+  <text x="672" y="145" class="small">rerun: target gone? new fail?</text>
+  <rect x="672" y="158" width="238" height="0" fill="none"/>
+
+  <line x1="178" y1="116" x2="218" y2="116" class="arrow"/>
+  <line x1="386" y1="116" x2="426" y2="116" class="arrow"/>
+  <line x1="606" y1="116" x2="646" y2="116" class="arrow"/>
+
+  <rect x="430" y="200" width="176" height="38" class="accent"/>
+  <text x="452" y="224" class="badge">NOT READY / REVIEW / READY</text>
+  <line x1="518" y1="162" x2="518" y2="196" class="arrow"/>
+
+  <rect x="650" y="200" width="282" height="38" class="box"/>
+  <text x="672" y="224" class="small">metadata-only evidence · no runtime Valency</text>
+  <line x1="606" y1="116" x2="606" y2="214" class="arrow" opacity="0.35"/>
+  <line x1="606" y1="214" x2="646" y2="214" class="arrow" opacity="0.35"/>
+</svg>

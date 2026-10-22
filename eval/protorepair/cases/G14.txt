@@ -1,0 +1,6 @@
+NMC811 || Li coin-cell assembly (adapted from Llanos et al., ACS AMI 2024, CC BY 4.0; G14 clean control).
+1. Mix 95 wt% NMC811, 3 wt% Super C65 carbon black, and 2 wt% PVDF in NMP. The cathode contains 95 wt% NMC811. Use 20 g total solids and 37.5 mL NMP, giving 34.1 wt% solids.
+2. Coat the slurry on 20 um Al foil to a total dry loading of 10.5 mg/cm², corresponding to ~2.0 mAh/cm² at 200 mAh/g. Punch 14 mm cathodes.
+3. Dry the CAM powder at 120 °C under vacuum for 3 h. Dry the coated electrodes in a fume hood overnight, then at 80 °C for 4 h; calender; final dry at 80 °C under vacuum for at least 12 h before transfer to the glovebox.
+4. Assemble CR2016 cells in an Ar glovebox with H2O and O2 <1 ppm, using a 19 mm Li foil anode (50 µm, stored in the glovebox), a 19 mm Whatman GF/A separator (49.4 mg test mass), and 200 µL of 1.0 M LiPF6 in EC:DMC (1:1 v/v).
+5. Water test values: NMC811 200 ppm, carbon 500 ppm, PVDF 2000 ppm, separator 75 ppm, electrolyte 15 ppm. Rest the cells for 24 h before cycling.

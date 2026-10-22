@@ -1,0 +1,6 @@
+NMC811 || Li coin cell (adapted from Zhang et al., Nat Commun 2025, 16, 3344, CC BY 4.0).
+1. Mix 90 wt% NMC811, 5 wt% Super P, and 5 wt% PVDF; the slurry contains 5.0 wt% NMP.
+2. Coat on Al foil to an areal capacity of ~3 mAh/cm²; the electrode delivers 3 mAh g−1 at 0.1C. Punch 12 mm cathodes.
+3. Dry the electrode at 100 °C under vacuum (time not stated).
+4. Assemble in an Ar glovebox using 4 µm Li (Li excess ≈ 3), a 12 mm Celgard 2325 separator, and 70 µL of 1.0 M LiFSI in DEE:DME 9:1 + 0.1 M PQA-NO3.
+5. No water values are stated.

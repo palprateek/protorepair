@@ -1,0 +1,318 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CoinCellProtocolExtraction",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol",
+    "atmosphere",
+    "materials",
+    "electrodes",
+    "electrolyte",
+    "separator",
+    "steps",
+    "missing_fields",
+    "ambiguities"
+  ],
+  "properties": {
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "doi", "cell_format"],
+      "properties": {
+        "title": {"type": ["string", "null"]},
+        "doi": {"type": ["string", "null"]},
+        "cell_format": {"type": ["string", "null"]}
+      }
+    },
+    "atmosphere": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assembly_gas", "glovebox", "o2_ppm_max", "h2o_ppm_max", "evidence"],
+      "properties": {
+        "assembly_gas": {"type": ["string", "null"], "enum": ["Ar", "N2", "air", "other", null]},
+        "glovebox": {"type": ["boolean", "null"]},
+        "o2_ppm_max": {"type": ["number", "null"]},
+        "h2o_ppm_max": {"type": ["number", "null"]},
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["source_line", "quote"],
+            "properties": {
+              "source_line": {"type": "integer"},
+              "quote": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "materials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "role", "formula", "amount", "source_line", "quote"],
+        "properties": {
+          "name": {"type": "string"},
+          "role": {
+            "type": "string",
+            "enum": [
+              "active_material",
+              "conductive_additive",
+              "binder",
+              "solvent",
+              "salt",
+              "electrolyte_solvent",
+              "separator",
+              "current_collector",
+              "anode",
+              "casing",
+              "other"
+            ]
+          },
+          "formula": {"type": ["string", "null"]},
+          "amount": {"$ref": "#/$defs/Measurement"},
+          "source_line": {"type": "integer"},
+          "quote": {"type": "string"}
+        }
+      }
+    },
+    "electrodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "target",
+          "active_material",
+          "composition",
+          "total_dry_mass",
+          "solvent_name",
+          "solvent_volume",
+          "binder_solution_wt_pct",
+          "binder_solution_mass",
+          "mixing_duration",
+          "casting_wet_thickness",
+          "casting_speed",
+          "substrate",
+          "drying",
+          "calendering_pressure",
+          "calendering_load",
+          "disc_diameter",
+          "loading",
+          "source_lines",
+          "quote"
+        ],
+        "properties": {
+          "target": {"type": "string", "enum": ["cathode", "anode"]},
+          "active_material": {"type": ["string", "null"]},
+          "composition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["active_wt_pct", "conductive_wt_pct", "binder_wt_pct", "raw"],
+            "properties": {
+              "active_wt_pct": {"type": ["number", "null"]},
+              "conductive_wt_pct": {"type": ["number", "null"]},
+              "binder_wt_pct": {"type": ["number", "null"]},
+              "raw": {"type": ["string", "null"]}
+            }
+          },
+          "total_dry_mass": {"$ref": "#/$defs/Measurement"},
+          "solvent_name": {"type": ["string", "null"]},
+          "solvent_volume": {"$ref": "#/$defs/Measurement"},
+          "binder_solution_wt_pct": {"type": ["number", "null"]},
+          "binder_solution_mass": {"$ref": "#/$defs/Measurement"},
+          "mixing_duration": {"$ref": "#/$defs/Measurement"},
+          "casting_wet_thickness": {"$ref": "#/$defs/Measurement"},
+          "casting_speed": {"$ref": "#/$defs/Measurement"},
+          "substrate": {"type": ["string", "null"]},
+          "drying": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "stage",
+                "temperature",
+                "duration",
+                "atmosphere",
+                "pressure",
+                "endpoint",
+                "source_line",
+                "quote"
+              ],
+              "properties": {
+                "stage": {"type": "integer"},
+                "temperature": {"$ref": "#/$defs/Measurement"},
+                "duration": {"$ref": "#/$defs/Measurement"},
+                "atmosphere": {"type": ["string", "null"]},
+                "pressure": {"$ref": "#/$defs/Measurement"},
+                "endpoint": {"type": ["string", "null"]},
+                "source_line": {"type": "integer"},
+                "quote": {"type": "string"}
+              }
+            }
+          },
+          "calendering_pressure": {"$ref": "#/$defs/Measurement"},
+          "calendering_load": {"$ref": "#/$defs/Measurement"},
+          "disc_diameter": {"$ref": "#/$defs/Measurement"},
+          "loading": {"$ref": "#/$defs/Measurement"},
+          "source_lines": {"type": "array", "items": {"type": "integer"}},
+          "quote": {"type": "string"}
+        }
+      }
+    },
+    "electrolyte": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "salt",
+        "concentration",
+        "solvents",
+        "additives",
+        "volume",
+        "volume_basis",
+        "water_ppm_max",
+        "source_line",
+        "quote"
+      ],
+      "properties": {
+        "salt": {"type": ["string", "null"]},
+        "concentration": {"$ref": "#/$defs/Measurement"},
+        "solvents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "vol_ratio", "source_line", "quote"],
+            "properties": {
+              "name": {"type": "string"},
+              "vol_ratio": {"type": ["number", "null"]},
+              "source_line": {"type": "integer"},
+              "quote": {"type": "string"}
+            }
+          }
+        },
+        "additives": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "wt_pct", "source_line", "quote"],
+            "properties": {
+              "name": {"type": "string"},
+              "wt_pct": {"type": ["number", "null"]},
+              "source_line": {"type": "integer"},
+              "quote": {"type": "string"}
+            }
+          }
+        },
+        "volume": {"$ref": "#/$defs/Measurement"},
+        "volume_basis": {"type": ["string", "null"]},
+        "water_ppm_max": {"type": ["number", "null"]},
+        "source_line": {"type": "integer"},
+        "quote": {"type": "string"}
+      }
+    },
+    "separator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["material", "diameter", "thickness", "source_line", "quote"],
+      "properties": {
+        "material": {"type": ["string", "null"]},
+        "diameter": {"$ref": "#/$defs/Measurement"},
+        "thickness": {"$ref": "#/$defs/Measurement"},
+        "source_line": {"type": "integer"},
+        "quote": {"type": "string"}
+      }
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "index",
+          "source_lines",
+          "action",
+          "temperature_C",
+          "temperature_C_max",
+          "duration_min",
+          "duration_min_max",
+          "atmosphere",
+          "pressure_MPa",
+          "quote"
+        ],
+        "properties": {
+          "index": {"type": "integer"},
+          "source_lines": {"type": "array", "items": {"type": "integer"}},
+          "action": {"type": "string"},
+          "temperature_C": {"type": ["number", "null"]},
+          "temperature_C_max": {"type": ["number", "null"]},
+          "duration_min": {"type": ["number", "null"]},
+          "duration_min_max": {"type": ["number", "null"]},
+          "atmosphere": {"type": ["string", "null"]},
+          "pressure_MPa": {"type": ["number", "null"]},
+          "quote": {"type": "string"}
+        }
+      }
+    },
+    "missing_fields": {"type": "array", "items": {"type": "string"}},
+    "ambiguities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["field", "issue", "quote", "source_line"],
+        "properties": {
+          "field": {"type": "string"},
+          "issue": {
+            "type": "string",
+            "enum": [
+              "range",
+              "until",
+              "approximate",
+              "ambiguous_unit",
+              "table",
+              "footnote",
+              "unclear_referent",
+              "missing_value",
+              "other"
+            ]
+          },
+          "quote": {"type": "string"},
+          "source_line": {"type": "integer"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "Measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "min", "max", "unit", "qualifier", "raw"],
+      "properties": {
+        "value": {"type": ["number", "null"]},
+        "min": {"type": ["number", "null"]},
+        "max": {"type": ["number", "null"]},
+        "unit": {"type": ["string", "null"]},
+        "qualifier": {
+          "type": "string",
+          "enum": [
+            "exact",
+            "approx",
+            "range",
+            "until",
+            "at_least",
+            "at_most",
+            "unknown",
+            "ambiguous_unit"
+          ]
+        },
+        "raw": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

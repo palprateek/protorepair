@@ -1,0 +1,141 @@
+{
+  "EV-P2": {
+    "id": "EV-P2",
+    "kind": "paper",
+    "title": "High Voltage Cycling Stability of LiF-Coated NMC811 Electrode",
+    "authors": [
+      "Llanos et al."
+    ],
+    "year": 2024,
+    "venue": "ACS Applied Materials & Interfaces",
+    "doi": "10.1021/acsami.3c14394",
+    "url": "https://doi.org/10.1021/acsami.3c14394",
+    "claim": "Source values for the P2 hero fixture: 95:3:2, 10.5 mg/cm2, about 2 mAh/cm2, 200 uL, Ar <1 ppm.",
+    "used_by": [
+      "B1",
+      "B2",
+      "B4",
+      "C2"
+    ]
+  },
+  "EV-P4": {
+    "id": "EV-P4",
+    "kind": "paper",
+    "title": "P4 NMC811 || Li transfer-case source",
+    "authors": [
+      "Zhang et al."
+    ],
+    "year": 2025,
+    "venue": "Nature Communications",
+    "doi": "10.1038/s41467-025-58627-3",
+    "url": "https://doi.org/10.1038/s41467-025-58627-3",
+    "claim": "Source metadata only; no paper text is included.",
+    "used_by": [
+      "B2",
+      "B3",
+      "B4",
+      "C1",
+      "C2"
+    ]
+  },
+  "EV-P5": {
+    "id": "EV-P5",
+    "kind": "paper",
+    "title": "P5 NMC811 || Li transfer-case source",
+    "authors": [
+      "Yan et al."
+    ],
+    "year": 2026,
+    "venue": "Nature Communications",
+    "doi": "10.1038/s41467-026-72530-5",
+    "url": "https://doi.org/10.1038/s41467-026-72530-5",
+    "claim": "Source metadata only; no paper text is included.",
+    "used_by": [
+      "B2",
+      "B3",
+      "B4",
+      "B5",
+      "C1"
+    ]
+  },
+  "EV-B1": {
+    "id": "EV-B1",
+    "kind": "curated",
+    "title": "Composition and slurry mass balance",
+    "source": "Battery reference pack, formula 1",
+    "doi_or_url": null,
+    "claim": "m_i = f_i * m_solids; sum(f_i) = 1; solids wt% = m_solids / (m_solids + m_NMP), with NMP density 1.03 g/mL."
+  },
+  "EV-B2": {
+    "id": "EV-B2",
+    "kind": "curated",
+    "title": "Areal capacity = active loading x specific capacity",
+    "source": "Battery reference pack, formula 2",
+    "doi_or_url": "https://doi.org/10.1021/acsami.3c14394",
+    "claim": "10 mg/cm2 active x 200 mAh/g = 2.0 mAh/cm2; the /1000 conversion is required."
+  },
+  "EV-B3": {
+    "id": "EV-B3",
+    "kind": "curated",
+    "title": "Li areal capacity and excess",
+    "source": "Battery reference pack, formula 3",
+    "doi_or_url": null,
+    "claim": "Li density 0.534 g/cm3 x 3860 mAh/g = 0.2061 mAh/cm2 per um; ratio = Q_Li / Q_cathode."
+  },
+  "EV-B4": {
+    "id": "EV-B4",
+    "kind": "curated",
+    "title": "Electrolyte volume per areal capacity",
+    "source": "Battery reference pack, formula 4",
+    "doi_or_url": "https://doi.org/10.1021/acsami.3c14394",
+    "claim": "uL/mAh = V / (Q_areal x electrode area); g/Ah = uL/mAh x 1.26 mg/uL."
+  },
+  "EV-B5": {
+    "id": "EV-B5",
+    "kind": "curated",
+    "title": "Salt molarity and mass",
+    "source": "LiPF6 datasheet and battery reference pack",
+    "doi_or_url": null,
+    "claim": "n = M x V; m_salt = n x MW; mixed-salt total molarity is the sum of salts in the same solution. LiPF6 MW 151.9 g/mol."
+  },
+  "EV-C1": {
+    "id": "EV-C1",
+    "kind": "curated",
+    "title": "Water budget and HF upper bound",
+    "source": "Battery reference pack, formula 5; moisture table",
+    "doi_or_url": null,
+    "claim": "m_H2O = m x ppm / 1e6; m_HF,max = 2.22 x m_H2O; ppm on CAM basis is per CAM mass, not per batch."
+  },
+  "EV-C2": {
+    "id": "EV-C2",
+    "kind": "curated",
+    "title": "Atmosphere and drying screen",
+    "source": "Battery reference pack, C2 table",
+    "doi_or_url": null,
+    "claim": "Li metal requires an Ar glovebox at <=1 ppm H2O/O2; CAM powder 110-130 C, vacuum, >=3 h; coated electrode 80 C, vacuum, >=4 h."
+  },
+  "EV-430": {
+    "id": "EV-430",
+    "kind": "curated",
+    "title": "430 ppm is a Gr/NMC622 reference, not an NMC811 constant",
+    "source": "Battery reference pack, warning line",
+    "doi_or_url": null,
+    "claim": "Show 430 ppm as a warning/reference line only; do not use it as a hard NMC811 fail threshold."
+  },
+  "EV-HF": {
+    "id": "EV-HF",
+    "kind": "curated",
+    "title": "LiPF6 hydrolysis and HF upper bound",
+    "source": "Battery reference pack, mechanism note",
+    "doi_or_url": null,
+    "claim": "The 2.22 mass ratio is an upper-bound conversion from water to HF-equivalent, not a measurement of free HF."
+  },
+  "EV-LI": {
+    "id": "EV-LI",
+    "kind": "curated",
+    "title": "Li metal and Ar glovebox safety",
+    "source": "Battery reference pack, safety note",
+    "doi_or_url": null,
+    "claim": "Li metal reacts with N2 and water; use an Ar glovebox with controlled H2O/O2 and follow EHS review."
+  }
+}

@@ -1,0 +1,530 @@
+{
+  "generated_at": "2026-10-22T08:46:47.347311+00:00",
+  "case_ids": [
+    "G02",
+    "G03",
+    "G04",
+    "G05",
+    "G06",
+    "G07",
+    "G08",
+    "G09",
+    "G10",
+    "G11",
+    "G14"
+  ],
+  "gold_rows": 11,
+  "systems": {
+    "protorepair_full": {
+      "cases": 11,
+      "tp": 7,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "clean_value_patches": 0,
+      "clean_false_patch_rate": 0.0,
+      "patches_tested": 7,
+      "patch_validity": 1.0,
+      "no_regression": 1.0,
+      "citation_coverage": 1.0,
+      "citation_n": "7/7",
+      "ambiguity_recall": 1.0,
+      "unknown_recall": 1.0,
+      "readiness_exact": "11/11",
+      "critical_ready_errors": 0
+    },
+    "b0_structured_raw_llm": {
+      "status": "not_run",
+      "notes": "B0 requires the Gemini endpoint and three scored runs; it is not silently substituted. Run with --b0 when the key/network are available."
+    },
+    "b1_free_text_raw_llm": {
+      "status": "not_run",
+      "notes": "Optional; not run before B0."
+    },
+    "b2_deterministic_only": {
+      "cases": 11,
+      "tp": 7,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "clean_value_patches": 0,
+      "clean_false_patch_rate": 0.0,
+      "patches_tested": 7,
+      "patch_validity": 1.0,
+      "no_regression": 1.0,
+      "citation_coverage": 1.0,
+      "citation_n": "7/7",
+      "ambiguity_recall": 1.0,
+      "unknown_recall": 1.0,
+      "readiness_exact": "11/11",
+      "critical_ready_errors": 0
+    },
+    "b3_archived_linter": {
+      "status": "not_run",
+      "rows": [],
+      "notes": "Archived generic linter is excluded from the public export; no baseline was run there."
+    },
+    "b4_no_valency": {
+      "cases": 11,
+      "tp": 7,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "clean_value_patches": 0,
+      "clean_false_patch_rate": 0.0,
+      "patches_tested": 7,
+      "patch_validity": 1.0,
+      "no_regression": 1.0,
+      "citation_coverage": 0.0,
+      "citation_n": "0/7",
+      "ambiguity_recall": 1.0,
+      "unknown_recall": 1.0,
+      "readiness_exact": "11/11",
+      "critical_ready_errors": 0
+    }
+  },
+  "cases": [
+    {
+      "case_id": "G02",
+      "public": true,
+      "readiness_expected": "REVIEW",
+      "readiness_got": "REVIEW",
+      "readiness_match": true,
+      "gold_fail": [],
+      "pred_fail": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "ambiguous_expected": [],
+      "ambiguous_pred": [],
+      "ambiguous_hit": 0,
+      "unknown_expected": [
+        "B1",
+        "B3",
+        "C1",
+        "C2"
+      ],
+      "unknown_pred": [
+        "B1",
+        "B3",
+        "C1",
+        "C2"
+      ],
+      "unknown_hit": 4,
+      "value_patch_count": 0,
+      "patch_validity": [],
+      "citation_coverage": "n/a",
+      "citation_coverage_n": 0,
+      "fail_count": 0,
+      "latency_s": 0.0009,
+      "finding_count": 4,
+      "patches": []
+    },
+    {
+      "case_id": "G03",
+      "public": true,
+      "readiness_expected": "NOT READY",
+      "readiness_got": "NOT READY",
+      "readiness_match": true,
+      "gold_fail": [
+        "B1"
+      ],
+      "pred_fail": [
+        "B1"
+      ],
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "ambiguous_expected": [],
+      "ambiguous_pred": [],
+      "ambiguous_hit": 0,
+      "unknown_expected": [],
+      "unknown_pred": [
+        "B3",
+        "C1",
+        "C2"
+      ],
+      "unknown_hit": 0,
+      "value_patch_count": 1,
+      "patch_validity": [
+        {
+          "patch_id": "P-B1-G03",
+          "applied": true,
+          "target_removed": true,
+          "regressions": []
+        }
+      ],
+      "citation_coverage": "1/1",
+      "citation_coverage_n": 1,
+      "fail_count": 1,
+      "latency_s": 0.0007,
+      "finding_count": 4,
+      "patches": [
+        "P-B1-G03"
+      ]
+    },
+    {
+      "case_id": "G04",
+      "public": true,
+      "readiness_expected": "NOT READY",
+      "readiness_got": "NOT READY",
+      "readiness_match": true,
+      "gold_fail": [
+        "B2"
+      ],
+      "pred_fail": [
+        "B2"
+      ],
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "ambiguous_expected": [],
+      "ambiguous_pred": [],
+      "ambiguous_hit": 0,
+      "unknown_expected": [],
+      "unknown_pred": [
+        "B1",
+        "B3",
+        "C1",
+        "C2"
+      ],
+      "unknown_hit": 0,
+      "value_patch_count": 1,
+      "patch_validity": [
+        {
+          "patch_id": "P-B2-G04",
+          "applied": true,
+          "target_removed": true,
+          "regressions": []
+        }
+      ],
+      "citation_coverage": "1/1",
+      "citation_coverage_n": 1,
+      "fail_count": 1,
+      "latency_s": 0.0006,
+      "finding_count": 5,
+      "patches": [
+        "P-B2-G04"
+      ]
+    },
+    {
+      "case_id": "G05",
+      "public": true,
+      "readiness_expected": "REVIEW",
+      "readiness_got": "REVIEW",
+      "readiness_match": true,
+      "gold_fail": [
+        "B4"
+      ],
+      "pred_fail": [
+        "B4"
+      ],
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "ambiguous_expected": [],
+      "ambiguous_pred": [],
+      "ambiguous_hit": 0,
+      "unknown_expected": [],
+      "unknown_pred": [
+        "B1",
+        "B3",
+        "C1",
+        "C2"
+      ],
+      "unknown_hit": 0,
+      "value_patch_count": 1,
+      "patch_validity": [
+        {
+          "patch_id": "P-B4-G05",
+          "applied": true,
+          "target_removed": true,
+          "regressions": []
+        }
+      ],
+      "citation_coverage": "1/1",
+      "citation_coverage_n": 1,
+      "fail_count": 1,
+      "latency_s": 0.0006,
+      "finding_count": 5,
+      "patches": [
+        "P-B4-G05"
+      ]
+    },
+    {
+      "case_id": "G06",
+      "public": true,
+      "readiness_expected": "NOT READY",
+      "readiness_got": "NOT READY",
+      "readiness_match": true,
+      "gold_fail": [
+        "C2"
+      ],
+      "pred_fail": [
+        "C2"
+      ],
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "ambiguous_expected": [],
+      "ambiguous_pred": [],
+      "ambiguous_hit": 0,
+      "unknown_expected": [],
+      "unknown_pred": [
+        "B1",
+        "B3",
+        "C1"
+      ],
+      "unknown_hit": 0,
+      "value_patch_count": 1,
+      "patch_validity": [
+        {
+          "patch_id": "P-C2-G06",
+          "applied": true,
+          "target_removed": true,
+          "regressions": []
+        }
+      ],
+      "citation_coverage": "1/1",
+      "citation_coverage_n": 1,
+      "fail_count": 1,
+      "latency_s": 0.0005,
+      "finding_count": 4,
+      "patches": [
+        "P-C2-G06"
+      ]
+    },
+    {
+      "case_id": "G07",
+      "public": true,
+      "readiness_expected": "REVIEW",
+      "readiness_got": "REVIEW",
+      "readiness_match": true,
+      "gold_fail": [],
+      "pred_fail": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "ambiguous_expected": [
+        "A1",
+        "A2"
+      ],
+      "ambiguous_pred": [
+        "A1",
+        "A2"
+      ],
+      "ambiguous_hit": 2,
+      "unknown_expected": [],
+      "unknown_pred": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "unknown_hit": 0,
+      "value_patch_count": 0,
+      "patch_validity": [],
+      "citation_coverage": "n/a",
+      "citation_coverage_n": 0,
+      "fail_count": 0,
+      "latency_s": 0.0006,
+      "finding_count": 6,
+      "patches": []
+    },
+    {
+      "case_id": "G08",
+      "public": true,
+      "readiness_expected": "NOT READY",
+      "readiness_got": "NOT READY",
+      "readiness_match": true,
+      "gold_fail": [
+        "B3"
+      ],
+      "pred_fail": [
+        "B3"
+      ],
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "ambiguous_expected": [],
+      "ambiguous_pred": [
+        "A1",
+        "A2"
+      ],
+      "ambiguous_hit": 0,
+      "unknown_expected": [],
+      "unknown_pred": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ],
+      "unknown_hit": 0,
+      "value_patch_count": 1,
+      "patch_validity": [
+        {
+          "patch_id": "P-B3-G08",
+          "applied": true,
+          "target_removed": true,
+          "regressions": []
+        }
+      ],
+      "citation_coverage": "1/1",
+      "citation_coverage_n": 1,
+      "fail_count": 1,
+      "latency_s": 0.0006,
+      "finding_count": 7,
+      "patches": [
+        "P-B3-G08"
+      ]
+    },
+    {
+      "case_id": "G09",
+      "public": true,
+      "readiness_expected": "REVIEW",
+      "readiness_got": "REVIEW",
+      "readiness_match": true,
+      "gold_fail": [],
+      "pred_fail": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "ambiguous_expected": [],
+      "ambiguous_pred": [],
+      "ambiguous_hit": 0,
+      "unknown_expected": [
+        "B4",
+        "C1"
+      ],
+      "unknown_pred": [
+        "B4",
+        "C1"
+      ],
+      "unknown_hit": 2,
+      "value_patch_count": 0,
+      "patch_validity": [],
+      "citation_coverage": "n/a",
+      "citation_coverage_n": 0,
+      "fail_count": 0,
+      "latency_s": 0.0005,
+      "finding_count": 2,
+      "patches": []
+    },
+    {
+      "case_id": "G10",
+      "public": true,
+      "readiness_expected": "NOT READY",
+      "readiness_got": "NOT READY",
+      "readiness_match": true,
+      "gold_fail": [
+        "C1"
+      ],
+      "pred_fail": [
+        "C1"
+      ],
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "ambiguous_expected": [],
+      "ambiguous_pred": [],
+      "ambiguous_hit": 0,
+      "unknown_expected": [],
+      "unknown_pred": [
+        "B4"
+      ],
+      "unknown_hit": 0,
+      "value_patch_count": 1,
+      "patch_validity": [
+        {
+          "patch_id": "P-C1-G10",
+          "applied": true,
+          "target_removed": true,
+          "regressions": []
+        }
+      ],
+      "citation_coverage": "1/1",
+      "citation_coverage_n": 1,
+      "fail_count": 1,
+      "latency_s": 0.0005,
+      "finding_count": 2,
+      "patches": [
+        "P-C1-G10"
+      ]
+    },
+    {
+      "case_id": "G11",
+      "public": true,
+      "readiness_expected": "NOT READY",
+      "readiness_got": "NOT READY",
+      "readiness_match": true,
+      "gold_fail": [
+        "B5"
+      ],
+      "pred_fail": [
+        "B5"
+      ],
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "ambiguous_expected": [],
+      "ambiguous_pred": [],
+      "ambiguous_hit": 0,
+      "unknown_expected": [],
+      "unknown_pred": [
+        "B4",
+        "C1"
+      ],
+      "unknown_hit": 0,
+      "value_patch_count": 1,
+      "patch_validity": [
+        {
+          "patch_id": "P-B5-G11",
+          "applied": true,
+          "target_removed": true,
+          "regressions": []
+        }
+      ],
+      "citation_coverage": "1/1",
+      "citation_coverage_n": 1,
+      "fail_count": 1,
+      "latency_s": 0.0005,
+      "finding_count": 3,
+      "patches": [
+        "P-B5-G11"
+      ]
+    },
+    {
+      "case_id": "G14",
+      "public": true,
+      "readiness_expected": "READY",
+      "readiness_got": "READY",
+      "readiness_match": true,
+      "gold_fail": [],
+      "pred_fail": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "ambiguous_expected": [],
+      "ambiguous_pred": [],
+      "ambiguous_hit": 0,
+      "unknown_expected": [],
+      "unknown_pred": [],
+      "unknown_hit": 0,
+      "value_patch_count": 0,
+      "patch_validity": [],
+      "citation_coverage": "n/a",
+      "citation_coverage_n": 0,
+      "fail_count": 0,
+      "latency_s": 0.0005,
+      "finding_count": 0,
+      "patches": []
+    }
+  ]
+}

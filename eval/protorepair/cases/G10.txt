@@ -1,0 +1,5 @@
+NMC811 || Li coin cell (adapted from Yan et al., Nat Commun 2026, 17, CC BY 4.0).
+1. Use a purchased 95:3:2 NMC811 electrode with a total dry loading of 5.26 mg/cm² and an areal capacity of 1.0 mAh/cm²; punch 14 mm cathodes.
+2. Dry the purchased electrode at 120 °C under vacuum for 12 h.
+3. Assemble in an Ar glovebox with H2O and O2 <0.1 ppm, using 150 µm Li, a 16 mm Celgard 2500 separator, and 0.8 M LiFSI + 0.2 M LiDFOB in EC:EMC 3:7.
+4. The Li-cell electrolyte volume is not stated. NMC811 water content is 1,200 ppm by KFT.
