@@ -93,6 +93,19 @@ def to_markdown(result: PipelineResult) -> str:
     ]
     if r.protocol.attribution:
         lines += ["", r.protocol.attribution]
+    if result.source_document:
+        d = result.source_document
+        lines += [
+            "",
+            "## Document input",
+            "",
+            f"- File: `{d.get('filename', '—')}` ({d.get('kind', '—')})",
+            f"- Pages: {d.get('pages', 0)} · tables: {d.get('tables', 0)} · figures: {d.get('figures', 0)} · OCR: {'yes' if d.get('ocr') else 'no'}",
+        ]
+        for warning in d.get("warnings") or []:
+            lines.append(f"- Reader warning: {warning}")
+        for caption in d.get("figure_captions") or []:
+            lines.append(f"- Figure caption: {caption}")
     lines += [
         "",
         "## Parsed recipe",

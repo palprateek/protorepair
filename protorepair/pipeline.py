@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import copy
 from dataclasses import replace
+from typing import Any
 
 from .checks.capacity import check_capacity
 from .checks.composition import check_composition
@@ -121,6 +122,7 @@ def run_pipeline(
     recipe: Recipe | None = None,
     evidence_mode: str | None = None,
     extraction_mode: str = "structured",
+    source_document: dict[str, Any] | None = None,
 ) -> PipelineResult:
     if recipe is None:
         if fixture_id is not None:
@@ -153,6 +155,7 @@ def run_pipeline(
         evidence=evidence,
         extraction_mode=extraction_mode,
         warnings=warnings,
+        source_document=source_document,
     )
 
 

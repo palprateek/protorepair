@@ -3,8 +3,10 @@ from __future__ import annotations
 
 import argparse
 import sys
+from pathlib import Path
 
-from .fixtures import fixture_ids, load_fixture
+from .documents import DocumentError, extract_document
+from .fixtures import fixture_ids
 from .pipeline import run_pipeline, validate_patch
 from .report import to_json, to_markdown
 
@@ -14,6 +16,7 @@ def main(argv: list[str] | None = None) -> int:
     src = parser.add_mutually_exclusive_group(required=True)
     src.add_argument("--fixture", choices=fixture_ids(public_only=False))
     src.add_argument("--text", help="path to a protocol text file")
+    src.add_argument("--document", help="path to a PDF, DOCX, LaTeX, Markdown, text, or scanned image")
     parser.add_argument("--json", action="store_true")
     parser.add_argument("--validate-patches", action="store_true")
     parser.add_argument("--evidence-mode", default=None)
@@ -21,6 +24,18 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.fixture:
         result = run_pipeline(fixture_id=args.fixture, evidence_mode=args.evidence_mode)
+    elif args.document:
+        path = Path(args.document)
+        try:
+            document = extract_document(path.name, path.read_bytes())
+        except (DocumentError, OSError) as exc:
+            print(f"protorepair: {exc}", file=sys.stderr)
+            return 2
+        result = run_pipeline(
+            text=document.text,
+            source_document=document.summary(),
+            evidence_mode=args.evidence_mode,
+        )
     else:
         text = open(args.text, encoding="utf-8").read()
         result = run_pipeline(text=text, evidence_mode=args.evidence_mode)

@@ -23,11 +23,26 @@ from .models import (
     default_assumptions,
 )
 from .preparse import preparse
+from .tablefacts import parse_table_facts
 
 
 def _num(pattern: str, text: str, group: int = 1, flags=0) -> float | None:
     m = re.search(pattern, text, flags)
     return float(m.group(group)) if m else None
+
+
+def normalize_units_text(text: str) -> str:
+    """Make common pasted/LaTeX unit spellings parser-friendly."""
+    text = text.replace("\u00a0", " ").replace("−", "-").replace("μ", "µ")
+    text = re.sub(r"\bcm\s*(?:\^|\*\*)\s*\{?\s*-\s*2\}?", "cm²", text, flags=re.I)
+    text = re.sub(r"\bcm\s*(?:\^|\*\*)\s*\{?\s*2\}?", "cm²", text, flags=re.I)
+    text = re.sub(r"\bcm\s*2\b", "cm²", text, flags=re.I)
+    text = re.sub(r"\b(mg|mAh|mA)\s+cm²(?=\s|$|[,.;])", r"\1/cm²", text, flags=re.I)
+    text = re.sub(r"(?<=\d)\s*(mg|mAh)/cm²(?=[A-Za-z])", r" \1/cm² ", text, flags=re.I)
+    text = re.sub(r"\b(um|μm|µm)\b", "µm", text)
+    text = re.sub(r"\b(uL|μL|µL)\b", "µL", text)
+    text = re.sub(r"\bmA\s+h\b", "mAh", text)
+    return text
 
 
 def _step_for(text: str, needle: str, steps) -> str | None:
@@ -52,6 +67,8 @@ def _parse_composition(text: str) -> tuple[float | None, float | None, float | N
 
 
 def parse_text(text: str) -> Recipe:
+    raw_text = text
+    text = normalize_units_text(text)
     p = preparse(text)
     steps = p.steps
     lines = p.lines
@@ -103,6 +120,31 @@ def parse_text(text: str) -> Recipe:
     for m in re.finditer(r"(NMC811|carbon|PVDF|separator|electrolyte)\s+(?:water\s+(?:content|value)\s+)?(?:is\s+)?(\d[\d,]*)\s*ppm", text, flags=re.I):
         water[water_key[m.group(1).lower()]] = float(m.group(2).replace(",", ""))
 
+    # Conservative table fallback: only fill fields that prose did not state.
+    table_comp, table_water, table_values = parse_table_facts(p.tables)
+    if nmc is None:
+        nmc = table_comp[0]
+    if carbon is None:
+        carbon = table_comp[1]
+    if binder is None:
+        binder = table_comp[2]
+    for key, value in table_water.items():
+        water.setdefault(key, value)
+    if total_loading is None:
+        total_loading = table_values.get("total_loading")
+    if active_loading is None:
+        active_loading = table_values.get("active_loading")
+    if areal is None:
+        areal = table_values.get("areal_capacity")
+    if qspec is None:
+        qspec = table_values.get("specific_capacity")
+    if li_um is None:
+        li_um = table_values.get("li_thickness")
+    if vol is None:
+        vol = table_values.get("electrolyte_volume")
+    if diameter is None:
+        diameter = table_values.get("cathode_diameter")
+
     ambiguities: list[Ambiguity] = []
     for m in re.finditer(r"(\d+(?:\.\d+)?)\s*wt%\s*NMP", text, flags=re.I):
         q = m.group(0)
@@ -120,7 +162,7 @@ def parse_text(text: str) -> Recipe:
     cell_format = "CR2016" if "CR2016" in text else ("CR2032" if "CR2032" in text else None)
     r = Recipe(
         protocol=Protocol(title=title, cell_format=cell_format),
-        text=text,
+        text=raw_text,
         steps=steps,
         composition=Composition(
             nmc811_wt=nmc, carbon_wt=carbon, binder_wt=binder, stated_active_wt=stated_active,

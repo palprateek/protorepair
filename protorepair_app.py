@@ -7,6 +7,7 @@ deterministic parse fallback.
 from __future__ import annotations
 
 import copy
+import hashlib
 import os
 
 import streamlit as st
@@ -17,6 +18,7 @@ try:
 except Exception:
     pass
 
+from protorepair.documents import DocumentError, SUPPORTED_EXTENSIONS, extract_document
 from protorepair.evidence import attribution
 from protorepair.extract import extract
 from protorepair.fixtures import load_fixture, public_examples
@@ -42,6 +44,7 @@ st.markdown(
 )
 st.title("ProtoRepair")
 st.caption("Pre-flight checks for NMC811 || Li-metal coin-cell protocols — findings and local patches, not a rewrite.")
+has_gemini_key = bool(os.getenv("GEMINI_API_KEY"))
 
 examples = public_examples()
 if os.getenv("PROTOREPAIR_LOCAL", "").lower() in {"1", "true", "yes"}:
@@ -63,6 +66,50 @@ if "result" not in st.session_state:
     st.session_state.result = run_pipeline(fixture_id="G14")
     st.session_state.fixture_id = "G14"
     st.session_state.protocol_text = st.session_state.result.recipe.text
+if "document" not in st.session_state:
+    st.session_state.document = None
+if "document_signature" not in st.session_state:
+    st.session_state.document_signature = None
+
+st.sidebar.header("Input")
+uploaded = st.sidebar.file_uploader(
+    "Upload a protocol document",
+    type=sorted(ext.lstrip(".") for ext in SUPPORTED_EXTENSIONS),
+    help="PDF, DOCX, TXT, Markdown, LaTeX, or a PNG/JPG/TIFF scan. Tables, figure captions, and OCR text are extracted locally.",
+)
+if uploaded is not None:
+    data = uploaded.getvalue()
+    signature = hashlib.sha256(uploaded.name.encode("utf-8") + data).hexdigest()
+    if signature != st.session_state.document_signature:
+        try:
+            with st.spinner(f"Reading {uploaded.name}…"):
+                document = extract_document(uploaded.name, data)
+            st.session_state.document = document
+            st.session_state.document_signature = signature
+            st.session_state.fixture_id = None
+            st.session_state.protocol_text = document.text
+            st.session_state.result = run_pipeline(
+                text=document.text,
+                source_document=document.summary(),
+            )
+        except DocumentError as exc:
+            st.sidebar.error(str(exc))
+        except Exception as exc:
+            st.sidebar.error(f"Could not read {uploaded.name}: {exc}")
+
+document = st.session_state.get("document")
+if document is not None:
+    st.sidebar.success(
+        f"Read {document.filename} · {document.kind} · "
+        f"{document.pages or '—'} page(s) · {len(document.tables)} table(s) · "
+        f"{len(document.figures)} figure(s)"
+    )
+    if document.warnings:
+        with st.sidebar.expander("Reader warnings"):
+            for warning in document.warnings:
+                st.caption(warning)
+    if document.used_ocr:
+        st.sidebar.caption("OCR was used; check the extracted text for recognition errors.")
 
 labels = [e[0] for e in examples]
 ids = dict(examples)
@@ -71,49 +118,118 @@ if selected_label != st.session_state.selected_label:
     fixture_id = ids[selected_label]
     st.session_state.selected_label = selected_label
     st.session_state.fixture_id = fixture_id
+    st.session_state.document = None
     result = run_pipeline(fixture_id=fixture_id)
     st.session_state.result = result
     st.session_state.protocol_text = result.recipe.text
 
 st.sidebar.markdown("---")
 st.sidebar.markdown(
+    "**Which path should I use?**\n\n"
+    "- **Deterministic checks** are always required. They compute findings, patches, and readiness.\n"
+    "- **Use Gemini only when the reader/parser leaves fields missing** from messy prose, tables, or OCR. It fills the parsed fields; it does not decide readiness or write patches.\n"
+    "- If the fields are already explicit, skip Gemini; the deterministic parser is enough.\n"
+    "- A key is optional. Without one, unknowns stay visible instead of being guessed."
+)
+with st.sidebar.expander("Why the split?"):
+    st.markdown(
+        "The AI boundary is **reading**, not checking. Gemini output must pass schema, quote, and unit validation "
+        "before the deterministic pipeline sees it. Patches are generated only when a check has a source-faithful target."
+    )
+if not has_gemini_key:
+    st.sidebar.caption("`GEMINI_API_KEY` is not set. The upload/reader and deterministic checks still work.")
+st.sidebar.markdown(
     "**Demo modes**\n\n"
     "- Default: committed structured fixtures; checks and patches run live.\n"
-    "- Optional Gemini extraction: set `GEMINI_API_KEY` and use the extraction path; it is never required.\n"
+    "- Uploaded document: local text/table/OCR extraction; checks run live.\n"
     "- `EVIDENCE_MODE=none` runs the no-Valency ablation."
 )
 st.sidebar.markdown(attribution())
 
 left, right = st.columns([1.15, 0.85], gap="large")
 with left:
-    protocol_text = st.text_area("Protocol text", value=st.session_state.protocol_text, height=390)
+    if document is not None:
+        st.caption(
+            f"Source: uploaded `{document.filename}` · {document.kind} · "
+            f"{len(document.tables)} table(s) · {len(document.figures)} figure(s)"
+        )
+    protocol_text = st.text_area(
+        "Protocol text (extracted or pasted)",
+        value=st.session_state.protocol_text,
+        height=390,
+        help="You can edit the extracted text before checking. Table cells and OCR text are included in the text stream.",
+    )
     st.session_state.protocol_text = protocol_text
-    check = st.button("Check protocol", type="primary", use_container_width=True)
-    extract_live = st.button("Extract with Gemini (live, optional)", use_container_width=True)
-    if extract_live:
+    if document is not None:
+        with st.expander("Document reader details"):
+            st.write(
+                f"Pages: **{document.pages or '—'}** · tables: **{len(document.tables)}** · "
+                f"figures/charts: **{len(document.figures)}** · OCR: **{'yes' if document.used_ocr else 'no'}**"
+            )
+            if document.warnings:
+                for warning in document.warnings:
+                    st.warning(warning)
+            for table in document.tables[:3]:
+                st.caption(f"Table {table.number} · {table.method}")
+                st.markdown(table.markdown())
+            for figure in document.figures[:4]:
+                st.caption(f"Figure {figure.number} · {figure.caption or 'no caption'}")
+                if figure.ocr_text:
+                    st.code(figure.ocr_text[:1500], language="text")
+
+    check = st.button("Run deterministic checks", type="primary", use_container_width=True)
+    extract_live = st.button(
+        "Read with Gemini + run checks (optional)",
+        use_container_width=True,
+        disabled=not has_gemini_key,
+        help="Gemini fills structured fields from messy text. It never decides findings, patches, or readiness.",
+    )
+    st.caption(
+        "Use Gemini when the deterministic parser leaves fields missing. "
+        "The checks and patches are deterministic on both paths."
+    )
+
+    def _fixture_base(text: str):
         fixture_id = st.session_state.get("fixture_id")
-        base = load_fixture(fixture_id) if fixture_id and protocol_text.strip() == load_fixture(fixture_id).text.strip() else None
+        if not fixture_id:
+            return None
+        try:
+            fixture = load_fixture(fixture_id)
+        except KeyError:
+            return None
+        return fixture if text.strip() == fixture.text.strip() else None
+
+    source_document = document.summary() if document is not None else None
+
+    if extract_live:
+        base = _fixture_base(protocol_text)
         outcome = extract(protocol_text, recipe=base)
         if outcome.mode.startswith("gemini"):
-            st.session_state.result = run_pipeline(recipe=outcome.recipe, extraction_mode=outcome.mode)
-            st.success(f"Gemini extraction accepted ({outcome.mode}, {outcome.latency_s:.1f} s).")
+            st.session_state.result = run_pipeline(
+                recipe=outcome.recipe,
+                extraction_mode=outcome.mode,
+                source_document=source_document,
+            )
+            st.success(
+                f"Gemini read the source ({outcome.mode}, {outcome.latency_s:.1f} s). "
+                "Deterministic checks and patches ran on the extracted fields."
+            )
         else:
-            st.warning("Gemini extraction unavailable or invalid; continuing with the deterministic/structured fallback. " + "; ".join(outcome.errors[:2]))
+            st.warning(
+                "Gemini extraction unavailable or invalid; continuing with the deterministic/structured fallback. "
+                + "; ".join(outcome.errors[:2])
+            )
             if base is not None:
-                st.session_state.result = run_pipeline(fixture_id=fixture_id)
+                st.session_state.result = run_pipeline(fixture_id=st.session_state.fixture_id)
             else:
-                st.session_state.result = run_pipeline(text=protocol_text)
+                st.session_state.result = run_pipeline(text=protocol_text, source_document=source_document)
 
 if check:
-    fixture_id = st.session_state.get("fixture_id")
-    if fixture_id:
-        fixture = load_fixture(fixture_id)
-        if protocol_text.strip() == fixture.text.strip():
-            result = run_pipeline(fixture_id=fixture_id)
-        else:
-            result = run_pipeline(text=protocol_text)
+    base = _fixture_base(protocol_text)
+    if base is not None:
+        result = run_pipeline(fixture_id=st.session_state.fixture_id)
     else:
-        result = run_pipeline(text=protocol_text)
+        result = run_pipeline(text=protocol_text, source_document=source_document)
     st.session_state.result = result
 
 result: PipelineResult = st.session_state.result
@@ -139,6 +255,42 @@ with right:
         st.caption("No Critical/High finding; a Medium finding or material unknown blocks READY.")
     else:
         st.caption("At least one Critical/High finding. Critical findings cannot be acknowledged away.")
+
+missing = list(result.recipe.missing_fields)
+unknown_count = sum(1 for f in result.findings if f.status == "unknown")
+if result.extraction_mode.startswith("gemini"):
+    st.info(
+        "Gemini was used for **reading only**. The findings, patches, and readiness above were produced by the "
+        "deterministic checker. Missing values are still shown as unknown, not filled."
+    )
+elif missing or unknown_count:
+    if has_gemini_key:
+        st.info(
+            f"The deterministic path left **{len(missing)} missing field(s)** and **{unknown_count} unknown finding(s)**. "
+            "If the source prose or tables are messy, use **Read with Gemini + run checks**. "
+            "Gemini fills extracted fields only; the checks still decide findings and patches."
+        )
+    else:
+        st.warning(
+            f"The deterministic path left **{len(missing)} missing field(s)** and **{unknown_count} unknown finding(s)**. "
+            "Set `GEMINI_API_KEY` to enable optional reading with Gemini. Unknowns are intentionally not guessed."
+        )
+else:
+    st.success(
+        "The deterministic parser found enough explicit fields for the checks. Gemini is not needed for this input."
+    )
+
+st.caption(
+    "Checks do not fill missing values. They validate stated values and generate a patch only when a check has a "
+    "source-faithful target. Gemini may read the source, but it never writes a patch or overrides arithmetic."
+)
+if result.source_document:
+    d = result.source_document
+    st.caption(
+        f"Document input: {d.get('filename')} · {d.get('pages', 0)} page(s) · "
+        f"{d.get('tables', 0)} table(s) · {d.get('figures', 0)} figure(s) · "
+        f"OCR {'yes' if d.get('ocr') else 'no'}"
+    )
 
 st.markdown(f"> {DISCLAIMER}")
 st.markdown("---")
@@ -217,7 +369,11 @@ with tabs[2]:
         overridden.electrode.specific_capacity_mAh_g = qspec or None
         overridden.anode.thickness_um = li or None
         overridden.electrolyte.volume_uL = vol or None
-        st.session_state.result = run_pipeline(recipe=overridden, extraction_mode="structured+overrides")
+        st.session_state.result = run_pipeline(
+            recipe=overridden,
+            extraction_mode="structured+overrides",
+            source_document=result.source_document,
+        )
         st.rerun()
 
 with tabs[3]:

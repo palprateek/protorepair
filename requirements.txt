@@ -4,3 +4,13 @@ requests>=2.28
 python-dotenv>=1.0
 jsonschema>=4.20
 pytest>=8.0
+# Test-only PDF fixture generator for the document tests.
+reportlab>=4
+# Local document reader (PDF/DOCX/OCR/LaTeX). OCR needs the tesseract binary;
+# PDF rendering needs Poppler's pdftoppm. See README_PROTOREPAIR.md.
+pdfplumber>=0.11
+python-docx>=1.1
+pytesseract>=0.3.13
+pdf2image>=1.17
+pylatexenc>=2.10
+Pillow>=10

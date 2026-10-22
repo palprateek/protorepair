@@ -65,6 +65,8 @@ def flatten_tables(lines: list[str]) -> list[list[list[str]]]:
     tables: list[list[list[str]]] = []
     current: list[list[str]] = []
     for line in lines:
+        if line.strip().startswith(("[TABLE ", "[FIGURE ")) or line.strip().startswith("Caption:"):
+            continue
         if "|" in line:
             cells = [c.strip() for c in line.strip().strip("|").split("|")]
             if all(re.fullmatch(r":?-{2,}:?", c) for c in cells if c):

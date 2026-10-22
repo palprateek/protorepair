@@ -1,20 +1,24 @@
 # ProtoRepair: a pre-flight checker for NMC811 || Li-metal coin cells
 
-**One-line pitch:** Paste an assembly protocol; get deterministic findings and one local patch per finding, with explicit units, assumptions, and metadata-only evidence — not a rewritten protocol or a made-up score.
+**One-line pitch:** Upload or paste an NMC811 || Li-metal protocol; get deterministic findings and one local patch per finding, with explicit units, assumptions, and metadata-only evidence — not a rewritten protocol or a made-up score.
 
 ## The problem
 
 Coin-cell protocols fail silently in the space between prose and arithmetic. A cathode line says 95:3:2, while a later sentence says 90:5:5. A loading of 21 mg/cm² is paired with an areal capacity that implies 3.99 mAh/cm², not the stated 2.0. A 20 µL fill looks fine until divided by the cathode capacity. A Li-metal protocol says “N₂ glovebox.” An LLM can read all of this and still invent a confident correction.
 
+The input is often not clean text: it is a PDF with borderless tables, a DOCX with Office equations, a scanned page, or a LaTeX source with `siunitx` units. ProtoRepair reads those locally first, then checks only what the source actually states.
+
 ProtoRepair is deliberately narrower: it checks what can be checked deterministically, keeps missing values visible, and proposes a local patch only when the source gives a defensible target.
 
 ## What the user sees
 
+- **Document ingestion:** PDF, DOCX, TXT/Markdown, LaTeX, and scanned images; extracted text is editable before checking.
 - **Readiness:** `NOT READY`, `REVIEW`, or `READY` — no numeric protocol score.
 - **Findings:** class, step, quote, severity, confidence, explanation, assumptions, evidence.
 - **One patch per finding:** a single contiguous span, preview only, never merged.
 - **Moisture budget:** per-cell water mass, CAM-basis ppm, HF upper bound, component limits; the 430 ppm line is labeled as a Gr/NMC622 warning, not an NMC811 constant.
 - **Unknowns:** missing Li thickness, electrolyte volume, water values, or drying time stay `unknown`; they are not converted to zero or a pass.
+- **Reader diagnostics:** pages, tables, figures/charts, OCR use, and warnings are shown next to the extracted text.
 
 ![ProtoRepair cover](docs/assets/protorepair-cover.png)
 
@@ -24,11 +28,16 @@ ProtoRepair is deliberately narrower: it checks what can be checked deterministi
 
 ## How it works
 
-1. **Parse conservatively.** Line IDs, step segmentation, units, and quotes. The licensed demo fixtures carry structured facts; pasted text falls back to a deterministic parser.
-2. **Extract only if needed.** Optional Gemini extraction must pass the frozen JSON Schema, quote/line checks, and unit/basis reconciliation. Invalid output is discarded. No key still runs.
-3. **Run deterministic checks.** Composition, loading ↔ capacity, Li excess, electrolyte fill, salt molarity, moisture, atmosphere/drying, units, and semantics. Arithmetic and thresholds live in code, not in the model.
-4. **Propose local patches.** Apply the text/structured patch to the original, rerun all checks, require the target finding to disappear, and count any new fail as a regression.
-5. **Attach metadata-only evidence.** Runtime never calls Valency. `EVIDENCE_MODE=none` is a clean no-Valency ablation.
+1. **Read locally.** PDF text/tables, DOCX paragraphs/tables/equations, `.tex` LaTeX, Markdown, and image OCR become one conservative text stream with page, table, and figure markers. Tables are preserved as Markdown; figure/chart captions and OCR labels are retained. The reader does not call a model.
+2. **Parse conservatively.** Line IDs, step segmentation, units, and quotes. The licensed demo fixtures carry structured facts; pasted or uploaded text falls back to a deterministic parser with a small table-facts layer for common composition, water, and parameter/value tables.
+3. **Extract only if needed.** Optional Gemini extraction must pass the frozen JSON Schema, quote/line checks, and unit/basis reconciliation. Invalid output is discarded. No key still runs. The UI recommends Gemini only when the deterministic parse leaves missing fields or unknowns.
+4. **Run deterministic checks.** Composition, loading ↔ capacity, Li excess, electrolyte fill, salt molarity, moisture, atmosphere/drying, units, and semantics. Arithmetic and thresholds live in code, not in the model.
+5. **Propose local patches.** Apply the text/structured patch to the original, rerun all checks, require the target finding to disappear, and count any new fail as a regression.
+6. **Attach metadata-only evidence.** Runtime never calls Valency. `EVIDENCE_MODE=none` is a clean no-Valency ablation.
+
+## AI or checks?
+
+**AI reads; code checks.** Gemini is optional and only fills structured fields. The deterministic checker always owns findings, arithmetic, patches, and readiness. Use the deterministic path when fields are explicit; use Gemini when messy prose, table-heavy layouts, or OCR leave fields missing. Missing values remain unknown rather than being guessed, and a patch appears only when a check has a source-faithful target.
 
 ## Demo narrative (90 seconds)
 
@@ -77,7 +86,9 @@ The evidence layer is build-time and public-safe: metadata only, no abstracts, n
 ## Limits and safety
 
 - NMC811 || Li-metal only; assembly excerpt in, findings out.
-- No PDF/OCR, no multi-protocol batch, no database, no numeric score.
+- No multi-protocol batch, database, or numeric score.
+- OCR quality depends on scan resolution and Tesseract; scanned table structure is best-effort.
+- Figures/charts are retained as captions and OCR labels; plotted data series are not digitized. Formula semantics are not re-evaluated.
 - No claim that a patch is experimentally validated or expert-approved.
 - NMP, Li metal, HF, and coin-cell assembly are hazardous; PI/EHS review remains required.
 - Three local-only source-derived fixtures are excluded from the public repo. Never publish `.env` or API keys; rotate any key that may have been exposed.

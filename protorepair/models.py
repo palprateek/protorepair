@@ -362,6 +362,7 @@ class PipelineResult:
     evidence: dict[str, dict] = field(default_factory=dict)
     extraction_mode: str = "structured"
     warnings: list[str] = field(default_factory=list)
+    source_document: dict[str, Any] | None = None
 
     @property
     def counts(self) -> dict[str, int]:
@@ -385,6 +386,7 @@ class PipelineResult:
             "assumptions": [asdict(a) for a in self.recipe.assumptions],
             "missing_fields": list(self.recipe.missing_fields),
             "original_text": self.recipe.text,
+            "source_document": self.source_document,
         }
 
 

@@ -6,7 +6,39 @@
 
 [Watch the 3:12 tutorial](docs/assets/protorepair-tutorial.mp4) · [Gallery card](docs/assets/protorepair-gallery-card.png) · [Write-up](writeup.md)
 
-Paste an assembly excerpt. ProtoRepair returns **findings + one local patch per finding**, backed by explicit arithmetic, units, and metadata-only evidence. It does **not** rewrite the protocol, merge a corrected version, or emit a numeric “protocol score.”
+Paste an assembly excerpt or upload a protocol document. ProtoRepair returns **findings + one local patch per finding**, backed by explicit arithmetic, units, and metadata-only evidence. It does **not** rewrite the protocol, merge a corrected version, or emit a numeric “protocol score.”
+
+## Read a real protocol
+
+The app reads documents locally before any model is involved:
+
+- **PDF** — text, layout, and tables via `pdfplumber`; scanned pages render through Poppler and OCR through Tesseract.
+- **DOCX** — paragraphs, tables, embedded images, and Office math text via `python-docx`.
+- **LaTeX** — `.tex`/`.latex`, including `siunitx` (`\SI{21}{mg/cm^2}`), simple `tabular` tables, and common math/unit spellings via `pylatexenc`.
+- **TXT / Markdown** — text and Markdown tables; **PNG / JPG / TIFF** — OCR of a single scanned page.
+- **Tables** are preserved as Markdown and common composition/water/parameter tables also feed the deterministic parser.
+- **Figures and charts** are retained as captions plus OCR labels. Plotted numerical series are **not** digitized; OCR text is evidence, not a data table.
+- **Scanned tables** are best-effort: OCR can preserve rows, but borderless or low-resolution scans may lose column structure.
+
+The reader is offline. OCR and PDF rendering need system tools:
+
+```bash
+# Debian/Ubuntu example
+sudo apt-get install poppler-utils tesseract-ocr
+```
+
+If OCR is unavailable, text PDFs and DOCX still work; the app shows a reader warning instead of failing.
+
+## Which path should I use?
+
+| Input state | What to do |
+|---|---|
+| Clean numbered protocol with explicit units | Use **Run deterministic checks**. Gemini is not needed. |
+| Messy prose, table-heavy document, or noisy OCR | Optionally use **Read with Gemini + run checks**. Gemini only fills the parsed fields. |
+| Missing value (for example, no Li thickness) | Leave it unknown. Gemini cannot invent a value; the checker reports the unknown. |
+| Findings, patches, readiness | Always deterministic. Gemini never writes a patch or overrides arithmetic. |
+
+The sidebar and the post-run guidance card state the same rule: **AI reads; code checks.** The Gemini button is disabled when `GEMINI_API_KEY` is absent. Without a key, the reader, deterministic parser, checks, patches, and exports still work.
 
 Readiness is one of **`NOT READY`**, **`REVIEW`**, or **`READY`**:
 
@@ -38,8 +70,12 @@ The checks are deterministic. Gemini extraction is optional and untrusted: outpu
 python3.11 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+# optional OCR/PDF-render system tools:
+# sudo apt-get install poppler-utils tesseract-ocr
 streamlit run protorepair_app.py
 ```
+
+Upload a PDF/DOCX/LaTeX/Markdown/text file or a scanned image from the sidebar, or paste text. The initial structured fixture remains the offline demo default.
 
 No API key is required. To enable live extraction:
 
@@ -58,6 +94,7 @@ CLI:
 python -m protorepair --fixture G14
 python -m protorepair --fixture G04 --json
 python -m protorepair --fixture G03 --validate-patches
+python -m protorepair --document protocol.pdf --json
 ```
 
 ## Tests
@@ -67,7 +104,7 @@ python -m pytest -q
 python -m eval.protorepair.run_eval --public-only
 ```
 
-The public subset reports **46 passed, 4 skipped** in this environment; the skips are live-API tests that require a key.
+The public subset reports **57 passed, 4 skipped** in this environment; the skips are live-API tests that require a key.
 
 ## Demo fixtures
 
@@ -139,6 +176,8 @@ The committed snapshot is metadata-only: title, authors, year, venue, DOI link, 
 
 ```text
 protorepair/            deterministic checks, parser, schema, patches, report, CLI
+protorepair/documents.py local PDF/DOCX/image/LaTeX reader, tables, OCR
+protorepair/tablefacts.py conservative table facts for the deterministic parser
 protorepair_app.py      Streamlit entrypoint
 protorepair/data/       evidence snapshot and optional gitignored Gemini cache
 eval/protorepair/       public fixtures, gold labels, harness, saved results
@@ -150,6 +189,9 @@ scripts/export_public.py clean public export + boundary scan
 
 - Eleven public + three local cases; no expert adjudication, no cell assembly, no statistical power.
 - The deterministic parser is conservative and can leave fields unknown; the structured fixtures are the reliable demo path.
+- OCR quality depends on scan resolution, language, and Tesseract availability. Table structure from scanned pages is approximate.
+- Figures/charts are captured as captions and OCR labels; plotted data series are not digitized or numerically checked.
+- Formula semantics are not solved: LaTeX is normalized to text, and PDF/DOCX equations are extracted as text, not re-evaluated.
 - The moisture screen shows component limits separately; the 430 ppm line is a Gr/NMC622 reference warning, not an NMC811 constant.
 - B0 raw-LLM baseline requires the Gemini endpoint and three scored runs. It has not been run.
 - Never publish `.env` or API keys; keep `.env` at mode 600 and rotate any key that may have been exposed.
